@@ -1,7 +1,14 @@
 "use client";
 import { useEffect, useState } from "react";
+import Loading from "./Loading";
 
-export default function ProjectDetails({ selected, setSelected }) {
+export default function ProjectDetails({
+  selected,
+  setSelected,
+  setMessage,
+  setError,
+  session,
+}) {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [status, setStatus] = useState();
@@ -17,13 +24,13 @@ export default function ProjectDetails({ selected, setSelected }) {
         ? {
             leadStatus: status,
             notes: notes,
-            modifiedBy: "admin",
+            modifiedBy: session.user.name,
             appointmentDate: appointmentDate,
           }
         : {
             leadStatus: status,
             notes: notes,
-            modifiedBy: "admin",
+            modifiedBy: session.user.name,
           };
 
       console.log(fomData);
@@ -44,10 +51,13 @@ export default function ProjectDetails({ selected, setSelected }) {
         throw new Error("Failed to Update");
       }
       console.log("Updated successfully");
+      setMessage("Lead details have been updated.");
+      setTimeout(() => setMessage(""), 2000);
+      setSelected(null);
     } catch (error) {
-      console.error("Error verifying OTP:", error);
-      // setError("Error verifying phone number");
-      // Handle error (e.g., show error message)
+      console.error("Error updating:", error);
+      setError("Error updating changes.");
+      setTimeout(() => setError(""), 2000);
     }
   };
 
@@ -59,7 +69,7 @@ export default function ProjectDetails({ selected, setSelected }) {
         );
         const data = await res.json();
         setUser(data);
-        setNotes(data.notes);
+        setNotes(data.notes ? data.notes : "");
         setStatus(data.leadStatus);
         setAppointmentDate(data.appointmentDate);
       } catch (error) {
@@ -208,7 +218,7 @@ export default function ProjectDetails({ selected, setSelected }) {
               </label>
               <textarea
                 rows="4"
-                value={user.notes ? user.notes : undefined}
+                value={notes}
                 onChange={(e) => setNotes(e.target.value)}
                 placeholder="Add notes about this project..."
                 className="w-full rounded-lg border border-gray-300 p-3 text-gray-700 text-sm focus:ring-2 focus:ring-indigo-400 focus:outline-none transition-all"
@@ -235,7 +245,7 @@ export default function ProjectDetails({ selected, setSelected }) {
           </form>
         </div>
       ) : (
-        <div>Loading....</div>
+        <Loading />
       )}
     </div>
   );

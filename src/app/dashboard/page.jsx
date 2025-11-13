@@ -9,7 +9,7 @@ export default async function Page() {
 
   return (
     <>
-      <Dashboard />
+      <Dashboard session={session} />
     </>
   );
 }

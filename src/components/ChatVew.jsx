@@ -42,20 +42,31 @@ const ChatView = () => {
         </h2>
         <div className="p-2 space-y-2">
           {users.map((user) => {
-            const lastMsg =
-              allMessages.filter((m) => m.sessionId === user).slice(0)[0]
-                ?.text || "";
+            const lastMsg = allMessages
+              .filter((m) => m.sessionId === user)
+              .slice(0)[0];
+            const text = lastMsg?.text;
+            const isAdmin = lastMsg?.isAdmin;
             return (
               <div
                 key={user}
                 onClick={() => setSelectedUser(user)}
-                className={`p-2 rounded cursor-pointer bg-neutral-100 ${
-                  selectedUser === user ? "ring" : "hover:bg-primary-100"
+                className={`flex flex-row items-center justify-between p-2 rounded cursor-pointer bg-neutral-100 ${
+                  selectedUser === user ? "ring" : "hover:bg-neutral-200"
                 }`}
               >
-                <div className="font-semibold">{user}</div>
-                <div className="text-xs text-neutral-800 truncate">
-                  {lastMsg}
+                <div>
+                  <div className="font-semibold">{user}</div>
+                  <div className="text-xs text-neutral-800 truncate">
+                    {text}
+                  </div>
+                </div>
+                <div
+                  className={`${
+                    isAdmin ? "hidden" : "block"
+                  } rounded-full bg-green-300 text-xs px-2 py-1`}
+                >
+                  NEW
                 </div>
               </div>
             );
@@ -69,16 +80,16 @@ const ChatView = () => {
             {selectedUser ? `Chat with ${selectedUser}` : "Select a user"}
           </h2>
         </div>
-        <div className="flex flex-col-reverse p-4 overflow-y-auto flex-1">
+        <div className="flex flex-col-reverse p-4 overflow-y-auto flex-1 px-12">
           {selectedUser &&
             userMessages.map((msg, i) => (
               <div
                 key={i}
                 className={`${
                   msg.isAdmin
-                    ? "bg-primary-300 ml-auto"
+                    ? "bg-neutral-200 ml-auto"
                     : "bg-neutral-300 mr-auto"
-                } mb-2 p-2  rounded-lg max-w-xl`}
+                } mb-2 p-2  rounded-lg max-w-xl shadow-xl`}
               >
                 <div className="text-xs text-neutral-600">
                   {new Date(msg.createdAt).toLocaleTimeString()}
@@ -100,8 +111,8 @@ const ChatView = () => {
               placeholder="Type a message..."
               className="flex-1 border rounded-lg p-2 bg-neutral-200 text-neutral-800"
             />
-            <button className="bg-green-800 text-white px-4 rounded-lg">
-              Send
+            <button className="border border-neutral-800 hover:bg-neutral-200 cursor-pointer font-light px-4 rounded-lg">
+              SEND
             </button>
           </form>
         )}
