@@ -103,7 +103,7 @@ export default function Dashboard({ session }) {
             </div>
           </div>
         </div>
-        <div className="overflow-y-scroll overflow-x-auto min-h-[50vh]">
+        <div className="overflow-y-scroll mb-24 overflow-x-auto min-h-[50vh]">
           {users?.length >= 1 ? (
             <table className="w-full mt-4 text-left table-auto min-w-max">
               <TableHead filterBy={filterBy} setFilterBy={setFilterBy} />
