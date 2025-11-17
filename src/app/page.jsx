@@ -2,6 +2,12 @@ import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 import { authOptions } from "../app/api/auth/[...nextauth]/route";
 
+export const metadata = {
+  title: `CRM portal`,
+  description: `The official CRM portal of ${process.env.NEXT_PUBLIC_SITE_NAME}.`,
+  // metadataBase: new URL("https://next-learn-dashboard.vercel.sh"),
+};
+
 export default async function Page() {
   const session = await getServerSession(authOptions);
   if (!session) redirect("/login");

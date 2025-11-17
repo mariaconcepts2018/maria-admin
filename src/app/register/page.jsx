@@ -1,6 +1,11 @@
 "use client";
 import { useState } from "react";
 
+// export const metadata = {
+//   title: `Register`,
+//   // metadataBase: new URL("https://next-learn-dashboard.vercel.sh"),
+// };
+
 export default function RegisterPage() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -18,7 +23,10 @@ export default function RegisterPage() {
 
   return (
     <div className="flex items-center justify-center h-screen w-full">
-      <form onSubmit={handleRegister} className="flex flex-col gap-3 w-80 mx-auto">
+      <form
+        onSubmit={handleRegister}
+        className="flex flex-col gap-3 w-80 mx-auto"
+      >
         <h2 className="text-xl text-center font-bold">Register</h2>
         <input
           type="text"
@@ -41,7 +49,9 @@ export default function RegisterPage() {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-        <button className="bg-neutral-800 hover:bg-neutral-700 cursor-ponter text-white p-2">Register</button>
+        <button className="bg-neutral-800 hover:bg-neutral-700 cursor-ponter text-white p-2">
+          Register
+        </button>
       </form>
     </div>
   );

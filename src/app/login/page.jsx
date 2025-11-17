@@ -3,6 +3,11 @@ import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
+// export const metadata = {
+//   title: `Log In`,
+//   // metadataBase: new URL("https://next-learn-dashboard.vercel.sh"),
+// };
+
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -37,7 +42,9 @@ export default function LoginPage() {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-        <button className="bg-neutral-800 hover:bg-neutral-700 cursor-pointer text-white p-2 rounded">Log In</button>
+        <button className="bg-neutral-800 hover:bg-neutral-700 cursor-pointer text-white p-2 rounded">
+          Log In
+        </button>
       </form>
     </div>
   );

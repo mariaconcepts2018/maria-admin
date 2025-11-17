@@ -1,9 +1,14 @@
 "use client";
+import { signOut } from "next-auth/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-const Sidebar = () => {
+const Sidebar = ({ session }) => {
   const pathname = usePathname();
+
+  const handleLogout = () => {
+    signOut({ callbackUrl: "/login" });
+  };
 
   return (
     <>
@@ -21,7 +26,7 @@ const Sidebar = () => {
             className={`flex items-center w-full p-3 leading-tight transition-all rounded-lg outline-none text-start ${
               pathname === "/dashboard"
                 ? "bg-neutral-800 text-white"
-                : "bg-white"
+                : "bg-white hover:bg-neutral-200"
             }`}
           >
             <div className="block grid mr-4 place-items-center">
@@ -45,7 +50,9 @@ const Sidebar = () => {
             href={"/import"}
             role="button"
             className={`flex items-center w-full p-3 leading-tight transition-all rounded-lg outline-none text-start ${
-              pathname === "/import" ? "bg-neutral-800 text-white" : "bg-white"
+              pathname === "/import"
+                ? "bg-neutral-800 text-white"
+                : "bg-white hover:bg-neutral-200"
             }`}
           >
             <div className="grid mr-4 place-items-center">
@@ -68,7 +75,9 @@ const Sidebar = () => {
             href={"/inbox"}
             role="button"
             className={`block flex items-center w-full p-3 leading-tight transition-all rounded-lg outline-none text-start ${
-              pathname === "/inbox" ? "bg-neutral-800 text-white" : "bg-white"
+              pathname === "/inbox"
+                ? "bg-neutral-800 text-white"
+                : "bg-white hover:bg-neutral-200"
             }`}
           >
             <div className="grid mr-4 place-items-center">
@@ -93,27 +102,30 @@ const Sidebar = () => {
               </div>
             </div>
           </Link>
-          <div
-            role="button"
-            className="flex items-center w-full p-3 leading-tight transition-all rounded-lg outline-none text-start hover:bg-blue-gray-50 hover:bg-opacity-80 hover:text-blue-gray-900 focus:bg-blue-gray-50 focus:bg-opacity-80 focus:text-blue-gray-900 active:bg-blue-gray-50 active:bg-opacity-80 active:text-blue-gray-900"
-          >
-            <div className="grid mr-4 place-items-center">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                fill="currentColor"
-                aria-hidden="true"
-                className="w-5 h-5"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M12 2.25a.75.75 0 01.75.75v9a.75.75 0 01-1.5 0V3a.75.75 0 01.75-.75zM6.166 5.106a.75.75 0 010 1.06 8.25 8.25 0 1011.668 0 .75.75 0 111.06-1.06c3.808 3.807 3.808 9.98 0 13.788-3.807 3.808-9.98 3.808-13.788 0-3.808-3.807-3.808-9.98 0-13.788a.75.75 0 011.06 0z"
-                  clipRule="evenodd"
-                ></path>
-              </svg>
+          {session && (
+            <div
+              role="button"
+              className="cursor-pointer border border-transparent hover:border-red-500 hover:text-red-500 flex items-center w-full p-3 leading-tight transition-all rounded-lg outline-none text-start  hover:bg-opacity-80 hover:text-blue-gray-900 focus:bg-blue-gray-50 focus:bg-opacity-80 focus:text-blue-gray-900 active:bg-blue-gray-50 active:bg-opacity-80 active:text-blue-gray-900"
+              onClick={handleLogout}
+            >
+              <div className="grid mr-4 place-items-center">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  aria-hidden="true"
+                  className="w-5 h-5"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M12 2.25a.75.75 0 01.75.75v9a.75.75 0 01-1.5 0V3a.75.75 0 01.75-.75zM6.166 5.106a.75.75 0 010 1.06 8.25 8.25 0 1011.668 0 .75.75 0 111.06-1.06c3.808 3.807 3.808 9.98 0 13.788-3.807 3.808-9.98 3.808-13.788 0-3.808-3.807-3.808-9.98 0-13.788a.75.75 0 011.06 0z"
+                    clipRule="evenodd"
+                  ></path>
+                </svg>
+              </div>
+              Log Out
             </div>
-            Log Out
-          </div>
+          )}
         </nav>
       </div>
     </>
