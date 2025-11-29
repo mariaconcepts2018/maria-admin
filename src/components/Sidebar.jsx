@@ -15,7 +15,7 @@ const Sidebar = ({ session }) => {
       <div className="flex h-screen w-full max-w-[18rem] flex-col bg-white bg-clip-border p-4 text-gray-700 shadow-xl shadow-blue-gray-900/5">
         <div className="p-4 mb-2">
           <h5 className="block font-sans text-xl antialiased font-semibold leading-snug tracking-normal text-blue-gray-900">
-            {process.env.NEXT_PUBLIC_SITE_NAME}
+            MARIA - SERAH
           </h5>
           <p>CRM Portal</p>
         </div>

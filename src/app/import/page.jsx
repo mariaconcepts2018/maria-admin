@@ -2,6 +2,7 @@ import FileUpload from "@/components/FileUpload";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../api/auth/[...nextauth]/route";
 import { redirect } from "next/navigation";
+import AddLeadButton from "@/components/AddLeadButton";
 
 export const metadata = {
   title: `CRM portal - Import Data`,
@@ -14,6 +15,12 @@ export default async function Page({}) {
   return (
     <>
       <div className="w-full lg:w-1/2 lg:mx-auto flex flex-col justify-center items-center gap-y-6">
+        <div>
+          <AddLeadButton />
+
+          <p className="text-center my-8">Or</p>
+          <h2 className="text-center font-bold">Upload excel sheet:</h2>
+        </div>
         <FileUpload />
       </div>
     </>

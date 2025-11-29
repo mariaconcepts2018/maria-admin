@@ -86,7 +86,7 @@ export default function ProjectDetails({
       {user ? (
         <div className="max-w-4xl mx-auto rounded bg-white border border-gray-200 h-screen p-8 overflow-y-scroll">
           <h2 className="text-lg text-center text-gray-800 mb-3">
-            Project Overview
+            Lead Overview
           </h2>
 
           {/* Project Info */}
@@ -126,6 +126,12 @@ export default function ProjectDetails({
                 Lead Source
               </span>{" "}
               {user.leadSource}
+            </div>
+            <div className=" border px-2 py-2 rounded-xs cursor-not-allowed">
+              <span className="font-medium text-gray-900 rounded bg-neutral-200 py-1 px-2 mr-2">
+                Company
+              </span>{" "}
+              {user.company}
             </div>
             <div className=" border px-2 py-2 rounded-xs cursor-not-allowed">
               <span className="font-medium text-gray-900 rounded bg-neutral-200 py-1 px-2 mr-2">
@@ -229,7 +235,7 @@ export default function ProjectDetails({
             <div className="mt-8 flex justify-end gap-x-6">
               <button
                 type="submit"
-                className="bg-neutral-800 hover:bg-neutral-700 text-white px-4 py-1 rounded-lg font-medium shadow-md transition-all"
+                className="bg-neutral-800 hover:bg-neutral-700 text-white px-4 py-1 rounded-lg font-medium shadow-md transition-all cursor-pointer"
               >
                 Save
               </button>
@@ -237,7 +243,7 @@ export default function ProjectDetails({
               <button
                 type="button"
                 onClick={() => setSelected(null)}
-                className="border border-neutral-600 hover:bg-neutral-200 px-4 py-1 rounded-lg font-medium shadow-md transition-all"
+                className="border border-neutral-600 hover:bg-neutral-200 px-4 py-1 rounded-lg font-medium shadow-md transition-all cursor-pointer"
               >
                 Close
               </button>

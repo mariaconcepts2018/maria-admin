@@ -9,6 +9,12 @@ export default function Dashboard({ session }) {
   const [users, setUsers] = useState([]);
   const [selected, setSelected] = useState("");
   const [filterBy, setFilterBy] = useState({ field: "", value: "" });
+  const [counts, setCounts] = useState({
+    open: "0",
+    pending: "0",
+    closed: "0",
+    total: "0",
+  });
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
@@ -30,25 +36,37 @@ export default function Dashboard({ session }) {
   };
 
   useEffect(() => {
-    async function fetchUsers() {
-      try {
-        setLoading(true);
-        setUsers([]);
-        const res = await fetch(
-          `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/admin/users?${filterBy.field}=${filterBy.value}`
-        );
-        const data = await res.json();
-        setUsers(data.users);
-      } catch (error) {
+    // async function fetchUsers() {
+    setLoading(true);
+    setUsers([]);
+    fetch(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/admin/users?${filterBy.field}=${filterBy.value}`
+    )
+      .then((res) => res.json())
+      .then((data) => setUsers(data?.users))
+      .catch((error) => {
         console.error("Error fetching users:", error);
         setError("Failed to load data");
         setTimeout(() => setError(""), 2000);
-      } finally {
+      })
+      .finally(() => {
         setLoading(false);
-      }
-    }
-    fetchUsers();
+      });
   }, [filterBy]);
+
+  useEffect(() => {
+    // async function fetchUsers() {
+    setLoading(true);
+    setUsers([]);
+    fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/admin/users-count`)
+      .then((res) => res.json())
+      .then((data) => setCounts(data))
+      .catch((error) => {
+        console.error("Error fetching users:", error);
+        setError("Failed to load data");
+        setTimeout(() => setError(""), 2000);
+      });
+  }, []);
 
   return (
     <>
@@ -72,6 +90,27 @@ export default function Dashboard({ session }) {
         <div className="relative px-4 py-2 text-gray-700 border-b rounded-none bg-clip-border">
           <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
             <ExportXl users={users} />
+            <div className="flex flex-row justify-evenly gap-x-4">
+              <div className="border border-neutral-200 rounded py-2 px-4 text-xl text-center w-20 font-bold">
+                <p className="text-xs text-neutral-500 font-light"> Open </p>
+                {counts.open}
+              </div>
+              <div className="border border-neutral-200 rounded py-2 px-4 text-xl text-center w-20 font-bold">
+                <p className="text-xs text-neutral-500 font-light"> Pending </p>
+                {counts.pending}
+              </div>
+              <div className="border border-neutral-200 rounded py-2 px-4 text-xl text-center w-20 font-bold">
+                <p className="text-xs text-neutral-500 font-light"> Closed </p>
+                {counts.closed}
+              </div>
+              <div className="border border-neutral-200 rounded py-2 px-4 text-xl text-center w-20 font-bold">
+                <p className="text-xs text-neutral-500 font-light"> Total </p>
+                {counts.total}
+              </div>
+            </div>
+            <div className="">
+              <div></div>
+            </div>
             <div className="w-full md:w-72">
               <div className="relative h-10 w-full min-w-[200px]">
                 <div className="absolute grid w-5 h-5 top-2/4 right-3 -translate-y-2/4 place-items-center text-blue-gray-500">
@@ -158,6 +197,13 @@ export default function Dashboard({ session }) {
                         <div className="flex flex-col">
                           <p className="block font-sans text-sm antialiased font-normal leading-normal text-blue-gray-900">
                             {item.leadSource}
+                          </p>
+                        </div>
+                      </td>
+                      <td className="p-4 border-b border-blue-gray-50">
+                        <div className="flex flex-col">
+                          <p className="block font-sans text-sm antialiased font-normal leading-normal text-blue-gray-900">
+                            {item.company}
                           </p>
                         </div>
                       </td>
