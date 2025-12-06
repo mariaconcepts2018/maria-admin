@@ -33,7 +33,6 @@ export default function AddLeadModal({
             modifiedBy: session.user.name,
           };
 
-      console.log(fomData);
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/admin/update-user/${selected}`,
         {

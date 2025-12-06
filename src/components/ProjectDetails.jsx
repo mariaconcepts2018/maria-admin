@@ -1,6 +1,8 @@
 "use client";
 import { useEffect, useState } from "react";
 import Loading from "./Loading";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 export default function ProjectDetails({
   selected,
@@ -8,12 +10,13 @@ export default function ProjectDetails({
   setMessage,
   setError,
   session,
+  setIsUpdated,
 }) {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [status, setStatus] = useState();
   const [notes, setNotes] = useState("");
-  const [appointmentDate, setAppointmentDate] = useState();
+  const [appointmentDate, setAppointmentDate] = useState("");
 
   const statusOptions = ["open", "pending", "closed"];
 
@@ -32,7 +35,6 @@ export default function ProjectDetails({
             notes: notes,
             modifiedBy: session.user.name,
           };
-
       console.log(fomData);
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/admin/update-user/${selected}`,
@@ -54,12 +56,19 @@ export default function ProjectDetails({
       setMessage("Lead details have been updated.");
       setTimeout(() => setMessage(""), 2000);
       setSelected(null);
+      setIsUpdated(true);
     } catch (error) {
       console.error("Error updating:", error);
       setError("Error updating changes.");
       setTimeout(() => setError(""), 2000);
     }
   };
+
+  useEffect(() => {
+    if (appointmentDate && status !== "closed") {
+      setStatus("pending");
+    }
+  }, [appointmentDate]);
 
   useEffect(() => {
     async function fetchUsers() {
@@ -71,7 +80,11 @@ export default function ProjectDetails({
         setUser(data);
         setNotes(data.notes ? data.notes : "");
         setStatus(data.leadStatus);
-        setAppointmentDate(data.appointmentDate);
+        setAppointmentDate(
+          data.appointmentDate && data.leadStatus === "pending"
+            ? new Date(data.appointmentDate)
+            : undefined
+        );
       } catch (error) {
         console.error("Error fetching users:", error);
       } finally {
@@ -160,22 +173,25 @@ export default function ProjectDetails({
             </div>
           </div>
 
-          <h2 className="text-lg text-center text-gray-800 mt-6">
-            Edit Project
-          </h2>
+          <h2 className="text-lg text-center text-gray-800 mt-6">Edit Lead</h2>
           <form method="post" onSubmit={handleSubmit}>
             {/* Status Buttons */}
             <div className="flex justify-evenly">
               <div className="mt-2">
                 <label className="block text-gray-800 font-medium mb-3 text-sm">
-                  Project Status
+                  Lead Status
                 </label>
                 <div className="flex min-w-sm">
                   {statusOptions.map((opt, index) => (
                     <button
                       key={opt}
                       type="button"
-                      onClick={() => setStatus(opt)}
+                      disabled={opt === "pending"}
+                      onClick={() => {
+                        setStatus(opt);
+                        if (opt === "closed" || opt === "closed")
+                          setAppointmentDate(undefined);
+                      }}
                       className={`${
                         index === 0
                           ? "rounded-l-lg"
@@ -205,13 +221,11 @@ export default function ProjectDetails({
 
                 <div className="relative max-w-sm">
                   <div className="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none"></div>
-                  <input
-                    datepicker="true"
-                    id="default-datepicker"
-                    type="date"
-                    value={appointmentDate}
-                    className="border border-gray-300 text-gray-900 text-sm rounded-lg block w-full py-1 px-2 text-sm w-full h-full"
-                    placeholder="Select Date"
+                  <DatePicker
+                    onChange={(date) => setAppointmentDate(date)}
+                    value={appointmentDate?.toLocaleDateString()}
+                    minDate={new Date()}
+                    className="border border-gray-300 text-gray-900 text-sm rounded-lg block w-full py-2 px-2 text-sm w-full h-full"
                   />
                 </div>
               </div>
@@ -226,7 +240,7 @@ export default function ProjectDetails({
                 rows="4"
                 value={notes}
                 onChange={(e) => setNotes(e.target.value)}
-                placeholder="Add notes about this project..."
+                placeholder="Add notes about this lead..."
                 className="w-full rounded-lg border border-gray-300 p-3 text-gray-700 text-sm focus:ring-2 focus:ring-indigo-400 focus:outline-none transition-all"
               />
             </div>

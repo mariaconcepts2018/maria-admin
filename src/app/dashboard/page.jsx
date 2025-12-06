@@ -4,7 +4,8 @@ import { redirect } from "next/navigation";
 import { authOptions } from "../api/auth/[...nextauth]/route";
 
 export const metadata = {
-  title: `CRM portal - Dashboard`,
+  title: `CRM portal`,
+  description: `The official CRM portal of ${process.env.NEXT_PUBLIC_SITE_NAME}.`,
   // metadataBase: new URL("https://next-learn-dashboard.vercel.sh"),
 };
 

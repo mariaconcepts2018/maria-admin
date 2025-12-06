@@ -5,7 +5,8 @@ import { redirect } from "next/navigation";
 import AddLeadButton from "@/components/AddLeadButton";
 
 export const metadata = {
-  title: `CRM portal - Import Data`,
+  title: `CRM portal`,
+  description: `The official CRM portal of ${process.env.NEXT_PUBLIC_SITE_NAME}.`,
   // metadataBase: new URL("https://next-learn-dashboard.vercel.sh"),
 };
 

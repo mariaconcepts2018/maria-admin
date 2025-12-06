@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import { io } from "socket.io-client";
 
 const socket = io(process.env.NEXT_PUBLIC_BACKEND_URL);
@@ -15,9 +15,19 @@ const ChatView = () => {
     socket.on("newMessageForAdmin", (msg) =>
       setAllMessages((prev) => [msg, ...prev])
     );
+
     return () => {
       socket.off("allChats");
       socket.off("newMessageForAdmin");
+    };
+  }, []);
+
+  useEffect(() => {
+    socket.on("messageFromAdmin", (msg) =>
+      setAllMessages((prev) => [msg, ...prev])
+    );
+    return () => {
+      socket.off("messageFromAdmin");
     };
   }, []);
 
@@ -29,8 +39,6 @@ const ChatView = () => {
     if (!text.trim()) return;
     const msg = { sessionId: selectedUser, text: text, isAdmin: true };
     socket.emit("adminChat", msg);
-    setAllMessages((prev) => [msg, ...prev]);
-    // socket.emit('adminChat', ({targetId, msgData}) )
     setText("");
   };
 
@@ -92,7 +100,7 @@ const ChatView = () => {
                 } mb-2 p-2  rounded-lg max-w-xl shadow-xl`}
               >
                 <div className="text-xs text-neutral-600">
-                  {new Date(msg.createdAt).toLocaleTimeString()}
+                  {/* {new Date(msg.createdAt).toLocaleTimeString()} */}
                 </div>
                 <div>{msg.text}</div>
               </div>

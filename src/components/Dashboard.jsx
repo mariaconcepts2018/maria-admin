@@ -7,6 +7,7 @@ import Loading from "./Loading";
 
 export default function Dashboard({ session }) {
   const [users, setUsers] = useState([]);
+  const [isUpdated, setIsUpdated] = useState(false);
   const [selected, setSelected] = useState("");
   const [filterBy, setFilterBy] = useState({ field: "", value: "" });
   const [counts, setCounts] = useState({
@@ -52,7 +53,9 @@ export default function Dashboard({ session }) {
       .finally(() => {
         setLoading(false);
       });
-  }, [filterBy]);
+
+    if (isUpdated) setIsUpdated(false);
+  }, [filterBy, isUpdated]);
 
   useEffect(() => {
     // async function fetchUsers() {
@@ -66,7 +69,7 @@ export default function Dashboard({ session }) {
         setError("Failed to load data");
         setTimeout(() => setError(""), 2000);
       });
-  }, []);
+  }, [isUpdated]);
 
   return (
     <>
@@ -293,6 +296,7 @@ export default function Dashboard({ session }) {
           setSelected={setSelected}
           setMessage={setMessage}
           setError={setError}
+          setIsUpdated={setIsUpdated}
         />
       )}
     </>
