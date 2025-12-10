@@ -92,7 +92,12 @@ export default function Dashboard({ session }) {
         )}
         <div className="relative px-4 py-2 text-gray-700 border-b rounded-none bg-clip-border">
           <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
-            <ExportXl users={users} />
+            <ExportXl
+              filterBy={filterBy}
+              setLoading={setLoading}
+              setError={setError}
+              setMessage={setMessage}
+            />
             <div className="flex flex-row justify-evenly gap-x-4">
               <div className="border border-neutral-200 rounded py-2 px-4 text-xl text-center w-20 font-bold">
                 <p className="text-xs text-neutral-500 font-light"> Open </p>

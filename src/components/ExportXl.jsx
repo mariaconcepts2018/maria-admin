@@ -1,8 +1,44 @@
 import { exportToExcel } from "@/utils/exportToExcel";
 
-export default function ExportXl({ users }) {
+export default function ExportXl({
+  filterBy,
+  setError,
+  setLoading,
+  setMessage,
+}) {
   const handleClick = (e) => {
-    exportToExcel(users, "leadDataSheet.xlsx");
+    setLoading(true);
+    fetch(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/admin/users-xlsx?${filterBy.field}=${filterBy.value}`
+    )
+      .then((res) => res.json())
+      .then((data) => {
+        if (data) {
+          const cleanData = data.users.map((item) => {
+            return {
+              ...item,
+              createdAt: new Date(item.createdAt).toLocaleDateString(),
+              modifiedOn: new Date(item.modifiedOn).toLocaleDateString(),
+              appointmentDate: new Date(
+                item.appointmentDate
+              ).toLocaleDateString(),
+            };
+          });
+          exportToExcel(cleanData, "leadDataSheet.xlsx");
+          setMessage("Excel file is successfully exported");
+          setTimeout(() => setMessage(""), 2000);
+        } else {
+          throw Error();
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching users:", error);
+        setError("Failed to load data");
+        setTimeout(() => setError(""), 2000);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   };
 
   return (
